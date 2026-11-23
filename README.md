@@ -1,0 +1,1 @@
+# baikal-bereg-app
