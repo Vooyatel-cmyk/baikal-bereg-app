@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#121917">
+<meta name="description" content="Байкал Берег — премиальный глэмпинг на берегу Байкала, Ольхонский район, Иркутская область.">
+<title>Байкал Берег — глэмпинг на Ольхоне</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+/* ============================================================
+   БАЙКАЛ БЕРЕГ — design tokens
+   ============================================================ */
+:root{
+  --bg:#121917;
+  --bg-deep:#0E1412;
+  --card:#1B2421;
+  --card-2:#212D28;
+  --text:#F2EFE9;
+  --muted:#9CA8A3;
+  --accent:#D98A4E;
+  --accent-soft:rgba(217,138,78,.14);
+  --accent-line:rgba(217,138,78,.35);
+  --border:rgba(242,239,233,.09);
+  --border-strong:rgba(242,239,233,.16);
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --sans:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --nav-h:72px;
+  --r-lg:24px;
+  --r-md:18px;
+  --r-sm:12px;
+  --shadow:0 18px 40px -20px rgba(0,0,0,.75);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{color-scheme:dark;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  font-family:var(--sans);
+  font-size:15px;
+  line-height:1.55;
+  color:var(--text);
+  background:
+    radial-gradient(130% 55% at 50% -12%, rgba(217,138,78,.09), transparent 62%),
+    radial-gradient(90% 45% at 100% 8%, rgba(63,102,86,.20), transparent 60%),
+    var(--bg);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+  overscroll-behavior-y:none;
+}
+h1,h2,h3,h4{margin:0;font-family:var(--serif);font-weight:600;letter-spacing:.005em;line-height:1.1}
+p{margin:0}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(217,138,78,.35);color:#fff}
+.muted{color:var(--muted)}
+.small{font-size:12.5px}
+
+/* ============================================================
+   Layout
+   ============================================================ */
+.app{
+  position:relative;
+  max-width:560px;
+  margin:0 auto;
+  min-height:100vh;
+  min-height:100svh;
+  padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 14px);
+}
+
+/* ---------------- Top bar ---------------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 18px;
+  background:rgba(18,25,23,.72);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  backdrop-filter:blur(18px) saturate(140%);
+  border-bottom:1px solid var(--border);
+}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{
+  width:38px;height:38px;flex:0 0 38px;
+  display:grid;place-items:center;
+  border-radius:12px;
+  border:1px solid var(--accent-line);
+  background:linear-gradient(160deg,rgba(217,138,78,.20),rgba(217,138,78,.03));
+  color:var(--accent);
+}
+.brand-mark svg{width:22px;height:22px}
+.brand-name{
+  font-family:var(--serif);
+  font-size:16px;font-weight:600;letter-spacing:.14em;
+  line-height:1.1;text-transform:uppercase;
+}
+.brand-sub{
+  font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--muted);margin-top:3px;
+}
+.topbar-cta{
+  font-size:12.5px;font-weight:700;letter-spacing:.02em;
+  color:#1A1207;
+  background:var(--accent);
+  padding:9px 15px;border-radius:999px;
+  box-shadow:0 6px 18px -6px rgba(217,138,78,.7);
+  transition:transform .2s ease,filter .2s ease;
+  white-space:nowrap;
+}
+.topbar-cta:active{transform:scale(.95)}
+
+/* ---------------- Screens ---------------- */
+.screen{display:none}
+.screen.active{display:block;animation:screenIn .42s cubic-bezier(.2,.75,.25,1)}
+@keyframes screenIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ---------------- Hero ---------------- */
+.hero{
+  position:relative;
+  min-height:520px;
+  height:78vh;
+  height:78svh;
+  max-height:740px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  overflow:hidden;
+  isolation:isolate;
+}
+.hero-media{position:absolute;inset:0;z-index:-2;background:linear-gradient(160deg,#22302A,#121917)}
+.hero-media img{width:100%;height:100%;object-fit:cover;opacity:.86;transform:scale(1.02)}
+.hero::after{
+  content:'';position:absolute;inset:0;z-index:-1;
+  background:
+    linear-gradient(180deg,rgba(18,25,23,.55) 0%,rgba(18,25,23,.05) 32%,rgba(18,25,23,.72) 72%,var(--bg) 100%),
+    linear-gradient(90deg,rgba(18,25,23,.5),transparent 60%);
+}
+.hero-inner{padding:0 22px 34px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:10.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--text);
+  padding:8px 14px;border-radius:999px;
+  border:1px solid rgba(242,239,233,.22);
+  background:rgba(18,25,23,.42);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  margin-bottom:18px;
+}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(217,138,78,.2)}
+.hero h1{
+  font-size:clamp(46px,14.5vw,72px);
+  line-height:.92;
+  letter-spacing:-.005em;
+  margin-bottom:14px;
+}
+.hero h1 em{
+  font-style:italic;font-weight:500;
+  color:var(--accent);
+  display:block;
+}
+.hero-sub{
+  font-size:14.5px;line-height:1.6;color:#DCD8D0;
+  max-width:340px;margin-bottom:24px;
+}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.hero-scroll{
+  position:absolute;left:50%;transform:translateX(-50%);
+  bottom:12px;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(242,239,233,.4);
+  animation:bob 2.4s ease-in-out infinite;
+}
+@keyframes bob{0%,100%{transform:translate(-50%,0);opacity:.4}50%{transform:translate(-50%,5px);opacity:.85}}
+
+/* ---------------- Buttons ---------------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 22px;border-radius:14px;
+  font-size:14.5px;font-weight:700;letter-spacing:.01em;
+  transition:transform .18s ease,filter .18s ease,background .18s ease,border-color .18s ease;
+  white-space:nowrap;
+}
+.btn:active{transform:scale(.97)}
+.btn-primary{
+  background:linear-gradient(160deg,#E29A61,var(--accent));
+  color:#1A1207;
+  box-shadow:0 10px 28px -12px rgba(217,138,78,.9);
+}
+.btn-primary:disabled{opacity:.42;box-shadow:none;cursor:not-allowed}
+.btn-ghost{
+  background:rgba(242,239,233,.07);
+  border:1px solid rgba(242,239,233,.18);
+  color:var(--text);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+.btn-ghost:active{background:rgba(242,239,233,.12)}
+.btn-block{width:100%}
+.btn-sm{padding:11px 16px;font-size:13px;border-radius:12px}
+
+/* ---------------- Sections ---------------- */
+.sec{padding:34px 20px 6px}
+.sec-tight{padding-top:24px}
+.eyebrow{
+  display:flex;align-items:center;gap:9px;
+  font-size:10px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:10px;
+}
+.eyebrow::before{content:'';width:22px;height:1px;background:var(--accent);opacity:.7}
+.sec h2{font-size:clamp(28px,8.4vw,36px);line-height:1.05;margin-bottom:8px}
+.sec-lead{color:var(--muted);font-size:14px;max-width:400px;margin-bottom:20px}
+
+/* ---------------- Feature grid ---------------- */
+.features{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.feature{
+  background:linear-gradient(170deg,var(--card-2),var(--card));
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  padding:16px 15px;
+}
+.feature svg{width:22px;height:22px;color:var(--accent);margin-bottom:10px}
+.feature h4{font-family:var(--sans);font-size:13.5px;font-weight:700;letter-spacing:.01em;margin-bottom:3px}
+.feature p{font-size:11.5px;line-height:1.45;color:var(--muted)}
+
+/* ---------------- Stay cards ---------------- */
+.stay{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  margin-bottom:16px;
+  transition:transform .25s ease,border-color .25s ease;
+}
+.stay:active{transform:scale(.995)}
+.stay-media{
+  position:relative;height:196px;
+  background:linear-gradient(150deg,#2A3730,#161D1A);
+  overflow:hidden;
+  cursor:pointer;
+}
+.stay-media img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.3,1)}
+.stay-media::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(18,25,23,0) 42%,rgba(18,25,23,.82) 100%);
+  pointer-events:none;
+}
+.stay-tag{
+  position:absolute;top:12px;left:12px;z-index:2;
+  font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--text);
+  padding:7px 11px;border-radius:999px;
+  background:rgba(18,25,23,.6);
+  border:1px solid rgba(242,239,233,.16);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+.stay-guests{
+  position:absolute;top:12px;right:12px;z-index:2;
+  display:flex;align-items:center;gap:5px;
+  font-size:11px;font-weight:700;
+  padding:7px 11px;border-radius:999px;
+  background:rgba(18,25,23,.6);
+  border:1px solid rgba(242,239,233,.16);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+.stay-guests svg{width:12px;height:12px;color:var(--accent)}
+.stay-body{padding:16px 18px 18px}
+.stay-body h3{font-size:25px;margin-bottom:4px;cursor:pointer}
+.stay-meta{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  font-size:11.5px;color:var(--muted);letter-spacing:.02em;margin-bottom:10px;
+}
+.stay-meta span.dot{width:3px;height:3px;border-radius:50%;background:var(--muted);opacity:.5}
+.stay-desc{font-size:13px;line-height:1.6;color:var(--muted);margin-bottom:14px}
+.stay-foot{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.price{font-family:var(--serif);font-size:23px;font-weight:600;letter-spacing:.01em;line-height:1}
+.price small{font-family:var(--sans);font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.04em;margin-left:3px}
+.price-cap{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.stay-foot .btn{flex:0 0 auto}
+
+/* ---------------- Experience rail ---------------- */
+.rail{
+  display:flex;gap:12px;overflow-x:auto;
+  padding:2px 20px 8px;margin:0 -20px;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+}
+.rail::-webkit-scrollbar{display:none}
+.rail-card{
+  position:relative;flex:0 0 216px;height:266px;
+  border-radius:var(--r-md);overflow:hidden;
+  scroll-snap-align:start;
+  border:1px solid var(--border);
+  background:linear-gradient(150deg,#2A3730,#161D1A);
+  display:flex;align-items:flex-end;
+}
+.rail-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85}
+.rail-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,25,23,.05) 30%,rgba(18,25,23,.92) 100%)}
+.rail-body{position:relative;z-index:1;padding:15px}
+.rail-body h4{font-size:19px;line-height:1.15;margin-bottom:4px}
+.rail-body p{font-size:11.5px;color:rgba(242,239,233,.72);line-height:1.4}
+
+/* ---------------- Gallery ---------------- */
+.gallery{
+  display:grid;grid-template-columns:1fr 1fr;gap:9px;
+  grid-auto-rows:118px;
+}
+.gallery .g{
+  border-radius:var(--r-sm);overflow:hidden;
+  background:linear-gradient(150deg,#2A3730,#161D1A);
+  border:1px solid var(--border);
+  position:relative;
+}
+.gallery .g img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.3,1)}
+.gallery .g.tall{grid-row:span 2}
+.gallery .g.wide{grid-column:span 2}
+
+/* ---------------- Quote ---------------- */
+.quote{
+  margin:34px 20px 6px;
+  padding:28px 22px;
+  border-radius:var(--r-lg);
+  border:1px solid var(--accent-line);
+  background:
+    radial-gradient(120% 100% at 100% 0%,rgba(217,138,78,.14),transparent 62%),
+    var(--card);
+  text-align:center;
+}
+.quote p{
+  font-family:var(--serif);font-style:italic;
+  font-size:23px;line-height:1.35;letter-spacing:.005em;
+  color:var(--text);
+}
+.quote span{
+  display:block;margin-top:14px;
+  font-family:var(--sans);font-style:normal;
+  font-size:10px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--accent);
+}
+
+/* ---------------- CTA banner ---------------- */
+.cta-banner{
+  margin:26px 20px 8px;
+  padding:26px 22px;
+  border-radius:var(--r-lg);
+  border:1px solid var(--border);
+  background:linear-gradient(160deg,var(--card-2),var(--card));
+  position:relative;overflow:hidden;
+}
+.cta-banner::before{
+  content:'';position:absolute;right:-60px;top:-70px;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(217,138,78,.22),transparent 68%);
+}
+.cta-banner h3{font-size:27px;line-height:1.08;margin-bottom:8px;position:relative}
+.cta-banner p{font-size:13px;color:var(--muted);margin-bottom:18px;position:relative;max-width:300px}
+.cta-banner .btn{position:relative}
+
+/* ---------------- Booking form ---------------- */
+.form-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:20px 18px;
+  margin-bottom:14px;
+}
+.field{margin-bottom:16px}
+.field:last-child{margin-bottom:0}
+.field > label{
+  display:block;
+  font-size:10.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:7px;
+}
+.control{
+  width:100%;
+  padding:14px 15px;
+  font-size:15px;font-weight:600;
+  color:var(--text);
+  background:var(--bg-deep);
+  border:1px solid var(--border);
+  border-radius:14px;
+  transition:border-color .2s ease,box-shadow .2s ease;
+  appearance:none;-webkit-appearance:none;
+}
+.control:focus{
+  outline:none;
+  border-color:var(--accent-line);
+  box-shadow:0 0 0 3px rgba(217,138,78,.13);
+}
+select.control{
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239CA8A3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat:no-repeat;
+  background-position:right 15px center;
+  padding-right:42px;
+}
+input[type="date"].control{min-height:50px}
+input[type="date"]::-webkit-calendar-picker-indicator{
+  filter:invert(.72) sepia(.35) saturate(2.6) hue-rotate(340deg);
+  cursor:pointer;opacity:.9;
+}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+.stepper{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg-deep);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:5px;
+}
+.stepper button{
+  width:40px;height:40px;flex:0 0 40px;
+  display:grid;place-items:center;
+  border-radius:11px;
+  background:rgba(242,239,233,.06);
+  color:var(--text);
+  font-size:20px;font-weight:500;line-height:1;
+  transition:background .18s ease,transform .12s ease;
+}
+.stepper button:active{transform:scale(.92);background:rgba(217,138,78,.22)}
+.stepper button:disabled{opacity:.3}
+.stepper .val{
+  font-family:var(--serif);font-size:21px;font-weight:600;
+  display:flex;align-items:baseline;gap:6px;
+}
+.stepper .val i{font-family:var(--sans);font-style:normal;font-size:11px;font-weight:600;color:var(--muted)}
+
+/* ---------------- Summary ---------------- */
+.summary{
+  background:var(--bg-deep);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  padding:16px;
+  margin-bottom:14px;
+}
+.sum-row{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  font-size:13px;padding:5px 0;
+}
+.sum-row span{color:var(--muted)}
+.sum-row b{font-weight:700;letter-spacing:.01em;text-align:right}
+.sum-divider{height:1px;background:var(--border);margin:10px 0}
+.sum-row.total{font-size:15px;padding-top:2px}
+.sum-row.total span{color:var(--text);font-weight:600}
+.sum-row.total b{font-family:var(--serif);font-size:24px;font-weight:600;color:var(--accent)}
+.hint{
+  display:flex;gap:9px;align-items:flex-start;
+  font-size:11.5px;line-height:1.5;color:var(--muted);
+  padding:0 4px;margin-top:12px;
+}
+.hint svg{width:14px;height:14px;flex:0 0 14px;margin-top:1px;color:var(--accent)}
+
+/* ---------------- Contacts ---------------- */
+.contact-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.contact{
+  display:flex;align-items:center;gap:14px;
+  padding:16px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  transition:border-color .2s ease,background .2s ease,transform .18s ease;
+}
+.contact:active{transform:scale(.99);background:var(--card-2)}
+.contact-ico{
+  width:42px;height:42px;flex:0 0 42px;
+  display:grid;place-items:center;
+  border-radius:13px;
+  background:var(--accent-soft);
+  border:1px solid var(--accent-line);
+  color:var(--accent);
+}
+.contact-ico svg{width:19px;height:19px}
+.contact-txt{min-width:0;flex:1}
+.contact-txt .k{font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.contact-txt .v{font-size:14.5px;font-weight:600;line-height:1.35}
+.contact-arrow{color:var(--muted);opacity:.6}
+.contact-arrow svg{width:16px;height:16px}
+
+.info-block{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  padding:18px;
+  margin-bottom:14px;
+}
+.info-block h4{
+  font-family:var(--sans);font-size:12px;font-weight:800;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+  margin-bottom:10px;
+}
+.info-block p{font-size:13px;line-height:1.65;color:var(--muted)}
+.info-block p + p{margin-top:8px}
+.info-block b{color:var(--text);font-weight:600}
+
+/* ---------------- Bottom nav ---------------- */
+.bottom-nav{
+  position:fixed;left:50%;bottom:0;transform:translateX(-50%);
+  width:100%;max-width:560px;z-index:60;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  padding:8px 6px calc(8px + env(safe-area-inset-bottom,0px));
+  background:rgba(16,22,20,.82);
+  -webkit-backdrop-filter:blur(22px) saturate(150%);
+  backdrop-filter:blur(22px) saturate(150%);
+  border-top:1px solid var(--border);
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:6px 2px;
+  color:var(--muted);
+  font-size:10px;font-weight:700;letter-spacing:.03em;
+  transition:color .2s ease;
+  position:relative;
+}
+.nav-item svg{width:22px;height:22px;transition:transform .22s cubic-bezier(.2,.8,.3,1)}
+.nav-item.active{color:var(--accent)}
+.nav-item.active svg{transform:translateY(-1px)}
+.nav-item.active::before{
+  content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%);
+  width:22px;height:2px;border-radius:2px;background:var(--accent);
+}
+
+/* ---------------- Overlay / sheets ---------------- */
+.overlay{
+  position:fixed;inset:0;z-index:100;
+  display:none;align-items:flex-end;justify-content:center;
+  background:rgba(6,10,9,.68);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  padding:0;
+}
+.overlay.open{display:flex;animation:ovIn .25s ease}
+@keyframes ovIn{from{opacity:0}to{opacity:1}}
+.sheet{
+  display:none;
+  width:100%;max-width:560px;
+  max-height:90vh;max-height:90svh;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-bottom:none;
+  border-radius:26px 26px 0 0;
+  padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  animation:sheetUp .38s cubic-bezier(.2,.8,.25,1);
+}
+.sheet.show{display:block}
+@keyframes sheetUp{from{transform:translateY(46px);opacity:.4}to{transform:none;opacity:1}}
+.sheet-head{
+  position:sticky;top:0;z-index:3;
+  display:flex;justify-content:center;
+  padding:10px 0 6px;
+  background:linear-gradient(180deg,var(--card) 60%,transparent);
+}
+.sheet-head::after{content:'';width:40px;height:4px;border-radius:4px;background:rgba(242,239,233,.18)}
+.sheet-close{
+  position:absolute;top:14px;right:16px;z-index:5;
+  width:36px;height:36px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  background:rgba(18,25,23,.62);
+  border:1px solid var(--border-strong);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  color:var(--text);
+  font-size:15px;line-height:1;
+}
+.sheet-media{
+  height:216px;margin:0 16px 0;
+  border-radius:var(--r-md);overflow:hidden;
+  background:linear-gradient(150deg,#2A3730,#161D1A);
+}
+.sheet-media img{width:100%;height:100%;object-fit:cover}
+.sheet-body{padding:18px 20px 8px}
+.sheet-body h3{font-size:29px;margin-bottom:8px}
+.sheet-body .desc{font-size:13.5px;line-height:1.65;color:var(--muted);margin-bottom:16px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
+.chip{
+  font-size:11.5px;font-weight:600;letter-spacing:.01em;
+  padding:7px 12px;border-radius:999px;
+  background:rgba(242,239,233,.06);
+  border:1px solid var(--border);
+  color:#D9D5CC;
+}
+.sheet-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:16px 0 8px;
+  border-top:1px solid var(--border);
+  position:sticky;bottom:0;
+  background:linear-gradient(180deg,transparent,var(--card) 26%);
+}
+
+/* ---------------- Success ---------------- */
+.success{
+  text-align:center;
+  padding:34px 24px calc(24px + env(safe-area-inset-bottom,0px));
+}
+.success-ico{
+  width:74px;height:74px;margin:0 auto 18px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 25%,rgba(217,138,78,.35),rgba(217,138,78,.10));
+  border:1px solid var(--accent-line);
+  color:var(--accent);
+  animation:pop .5s cubic-bezier(.2,1.4,.4,1);
+}
+@keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+.success-ico svg{width:34px;height:34px}
+.success h3{font-size:28px;margin-bottom:8px}
+.success > p{font-size:13.5px;line-height:1.6;color:var(--muted);max-width:320px;margin:0 auto 20px}
+.success .summary{text-align:left;margin-bottom:18px}
+
+/* ---------------- Toast ---------------- */
+.toast{
+  position:fixed;left:50%;z-index:200;
+  bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 18px);
+  transform:translate(-50%,16px);
+  max-width:calc(100% - 40px);
+  padding:12px 18px;
+  border-radius:14px;
+  background:rgba(33,45,40,.96);
+  border:1px solid var(--border-strong);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  color:var(--text);
+  font-size:13px;font-weight:600;
+  box-shadow:var(--shadow);
+  opacity:0;pointer-events:none;
+  transition:opacity .25s ease,transform .25s ease;
+  text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------------- Footer ---------------- */
+.foot{
+  padding:30px 22px 10px;
+  text-align:center;
+  color:rgba(156,168,163,.6);
+  font-size:11px;
+  letter-spacing:.06em;
+  line-height:1.7;
+}
+.foot .mark{
+  font-family:var(--serif);font-size:15px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--muted);
+  display:block;margin-bottom:8px;
+}
+
+/* ---------------- Motion prefs ---------------- */
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ TOP BAR ============ -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3.5 22.5 11 9.5l5.2 9.1 3.6-5.6 8.7 9.5"/>
+          <path d="M3.5 26.5h25"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">Байкал Берег</div>
+        <div class="brand-sub">глэмпинг · Ольхон</div>
+      </div>
+    </div>
+    <button class="topbar-cta" data-go="booking">Бронь</button>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SCREEN: HOME
+         ============================================================ -->
+    <section id="home" class="screen active">
+
+      <div class="hero">
+        <div class="hero-media">
+          <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=70" alt="Байкал на рассвете" onerror="this.style.display='none'">
+        </div>
+        <div class="hero-inner">
+          <div class="hero-badge"><span class="dot"></span>Ольхонский район · Байкал</div>
+          <h1>Байкал<em>Берег</em></h1>
+          <p class="hero-sub">Глэмпинг на берегу священного озера. Тишина, кедровый воздух и панорама воды из окна.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" data-go="booking">Забронировать</button>
+            <button class="btn btn-ghost" data-go="stays">Смотреть домики</button>
+          </div>
+        </div>
+        <div class="hero-scroll">листайте</div>
+      </div>
+
+      <!-- Features -->
+      <div class="sec">
+        <div class="eyebrow">Почему здесь</div>
+        <h2>Северная тишина<br>без компромиссов</h2>
+        <p class="sec-lead">Четыре дома на закрытой территории в 40 метрах от воды. Без соседей, шума и суеты.</p>
+
+        <div class="features">
+          <div class="feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M12 4v16"/></svg>
+            <h4>Панорама на озеро</h4>
+            <p>Остекление во всю стену в каждом доме</p>
+          </div>
+          <div class="feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s5 4.2 5 9a5 5 0 0 1-10 0c0-4.8 5-9 5-9Z"/></svg>
+            <h4>Тепло круглый год</h4>
+            <p>Печь, тёплый пол и продуманное утепление</p>
+          </div>
+          <div class="feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V9l6-5 6 5v12"/><path d="M10 21v-6h4v6"/></svg>
+            <h4>Приватная терраса</h4>
+            <p>Своё пространство с видом на воду и скалы</p>
+          </div>
+          <div class="feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.4"/></svg>
+            <h4>Рассвет из кровати</h4>
+            <p>Дома ориентированы на восток — к солнцу</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experiences -->
+      <div class="sec">
+        <div class="eyebrow">Впечатления</div>
+        <h2>Чем заняться<br>на Ольхоне</h2>
+        <p class="sec-lead">Организуем всё на месте — от бани до катера на мыс Хобой.</p>
+        <div class="rail">
+          <article class="rail-card">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=600&q=70" alt="" onerror="this.style.display='none'">
+            <div class="rail-body">
+              <h4>Закат на Хобое</h4>
+              <p>Прогулка на катере вдоль скал · 4 часа</p>
+            </div>
+          </article>
+          <article class="rail-card">
+            <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=70" alt="" onerror="this.style.display='none'">
+            <div class="rail-body">
+              <h4>Баня на берегу</h4>
+              <p>Дровяная баня и купель с водой Байкала</p>
+            </div>
+          </article>
+          <article class="rail-card">
+            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=70" alt="" onerror="this.style.display='none'">
+            <div class="rail-body">
+              <h4>Тропа к смотровой</h4>
+              <p>Треккинг по кедровому лесу · 2 часа</p>
+            </div>
+          </article>
+          <article class="rail-card">
+            <img src="https://images.unsplash.com/photo-1521401830884-6c03c1c87ebb?auto=format&fit=crop&w=600&q=70" alt="" onerror="this.style.display='none'">
+            <div class="rail-body">
+              <h4>Ужин у костра</h4>
+              <p>Локальная кухня и омуль на углях</p>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Quote -->
+      <div class="quote">
+        <p>«Здесь слышно только воду и ветер. Всё остальное остаётся на другом берегу.»</p>
+        <span>Байкал Берег</span>
+      </div>
+
+      <!-- Gallery -->
+      <div class="sec">
+        <div class="eyebrow">Атмосфера</div>
+        <h2>Как это<br>выглядит</h2>
+        <div class="gallery" style="margin-top:16px">
+          <div class="g tall"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=700&q=70" alt="" onerror="this.style.display='none'"></div>
+          <div class="g"><img src="https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&fit=crop&w=600&q=70" alt="" onerror="this.style.display='none'"></div>
+          <div class="g"><img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=70" alt="" onerror="this.style.display='none'"></div>
+          <div class="g wide"><img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=70" alt="" onerror="this.style.display='none'"></div>
+          <div class="g"><img src="https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=600&q=70" alt="" onerror="this.style.display='none'"></div>
+          <div class="g"><img src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=600&q=70" alt="" onerror="this.style.display='none'"></div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-banner">
+        <h3>Свободные даты<br>на этот сезон</h3>
+        <p>Забронируйте дом за пару минут — подтвердим в Telegram.</p>
+        <button class="btn btn-primary" data-go="booking">Выбрать даты</button>
+      </div>
+
+      <div class="foot">
+        <span class="mark">Байкал Берег</span>
+        Ольхонский район · Иркутская область<br>
+        © 2025 Глэмпинг «Байкал Берег»
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SCREEN: STAYS
+         ============================================================ -->
+    <section id="stays" class="screen">
+      <div class="sec sec-tight">
+        <div class="eyebrow">Размещение</div>
+        <h2>Дома<br>и шатры</h2>
+        <p class="sec-lead">Четыре автономных дома на территории глэмпинга. Цены указаны за ночь для двоих, включая завтрак.</p>
+      </div>
+
+      <!-- Каталог домиков рендерится сюда -->
+      <div class="sec sec-tight" id="staysList" style="padding-top:6px"></div>
+
+      <div class="cta-banner">
+        <h3>Не нашли<br>подходящий?</h3>
+        <p>Напишите нам — подберём дом под вашу компанию и даты.</p>
+        <button class="btn btn-ghost" data-go="contacts">Связаться</button>
+      </div>
+
+      <div class="foot">
+        <span class="mark">Байкал Берег</span>
+        Все дома оборудованы санузлом и кухней
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SCREEN: BOOKING
+         ============================================================ -->
+    <section id="booking" class="screen">
+      <div class="sec sec-tight">
+        <div class="eyebrow">Бронирование</div>
+        <h2>Выбрать<br>даты</h2>
+        <p class="sec-lead">Заявка ни к чему не обязывает — мы свяжемся с вами и подтвердим наличие.</p>
+      </div>
+
+      <div class="sec sec-tight" style="padding-top:6px">
+        <form id="bookingForm" novalidate>
+
+          <div class="form-card">
+            <div class="field">
+              <label for="houseSelect">Дом</label>
+              <select id="houseSelect" class="control"></select>
+            </div>
+
+            <div class="grid-2">
+              <div class="field" style="margin-bottom:0">
+                <label for="checkin">Заезд</label>
+                <input type="date" id="checkin" class="control">
+              </div>
+              <div class="field" style="margin-bottom:0">
+                <label for="checkout">Выезд</label>
+                <input type="date" id="checkout" class="control">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <div class="field">
+              <label>Гостей</label>
+              <div class="stepper">
+                <button type="button" id="minusGuests" aria-label="Меньше гостей">−</button>
+                <div class="val"><span id="guestsVal">2</span><i id="guestsMaxLabel">из 2</i></div>
+                <button type="button" id="plusGuests" aria-label="Больше гостей">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary">
+            <div class="sum-row"><span>Дом</span><b id="sumHouse">—</b></div>
+            <div class="sum-row"><span>Ночей</span><b id="sumNights">—</b></div>
+            <div class="sum-row"><span>Стоимость за ночь</span><b id="sumRate">—</b></div>
+            <div class="sum-divider"></div>
+            <div class="sum-row total"><span>Итого</span><b id="sumTotal">—</b></div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" id="submitBtn" disabled>Отправить заявку</button>
+
+          <div class="hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+            <span>Оплата на месте или по ссылке после подтверждения. Бесплатная отмена за 7 дней до заезда.</span>
+          </div>
+        </form>
+      </div>
+
+      <div class="foot">
+        <span class="mark">Байкал Берег</span>
+        Минимальное бронирование — 1 ночь
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SCREEN: CONTACTS
+         ============================================================ -->
+    <section id="contacts" class="screen">
+      <div class="sec sec-tight">
+        <div class="eyebrow">Контакты</div>
+        <h2>Как нас<br>найти</h2>
+        <p class="sec-lead">Мы на западном берегу Ольхона, в 12 км от паромной переправы.</p>
+      </div>
+
+      <div class="sec sec-tight" style="padding-top:6px">
+
+        <div class="contact-list">
+          <a class="contact" href="tel:+79140000000">
+            <div class="contact-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v2.6a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 3.7 2 2 0 0 1 4.1 1.5h2.6a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L7.8 9.3a16 16 0 0 0 6 6l1.1-1.1a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"/></svg>
+            </div>
+            <div class="contact-txt">
+              <div class="k">Телефон</div>
+              <div class="v">+7 (914) 000-00-00</div>
+            </div>
+            <div class="contact-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></div>
+          </a>
+
+          <a class="contact" href="https://t.me/baikalbereg" target="_blank" rel="noopener">
+            <div class="contact-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 4.5 2.8 11.6c-.9.3-.9 1.5 0 1.8l4.6 1.5 1.8 5.6c.3.8 1.3 1 1.9.4l2.5-2.5 4.6 3.4c.7.5 1.7.1 1.9-.7l3-14.6c.2-.9-.7-1.6-1.6-1.3Z"/><path d="m7.4 14.9 9.7-7.3-7.6 8.4"/></svg>
+            </div>
+            <div class="contact-txt">
+              <div class="k">Telegram</div>
+              <div class="v">@baikalbereg</div>
+            </div>
+            <div class="contact-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></div>
+          </a>
+
+          <a class="contact" href="https://yandex.ru/maps/?text=Ольхонский%20район%20Иркутская%20область%20Байкал" target="_blank" rel="noopener">
+            <div class="contact-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            </div>
+            <div class="contact-txt">
+              <div class="k">Адрес</div>
+              <div class="v">Ольхонский район,<br>Иркутская область</div>
+            </div>
+            <div class="contact-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></div>
+          </a>
+        </div>
+
+        <div class="info-block">
+          <h4>Как добраться</h4>
+          <p><b>Самолётом:</b> до Иркутска, далее 250 км до паромной переправы «МРС — Ольхон».</p>
+          <p><b>На машине:</b> по трассе Р-258 до Баяндая, затем на Еланцы и паром. Летом — очередь, планируйте время.</p>
+          <p><b>Трансфер:</b> организуем встречу из Иркутска — уточните при бронировании.</p>
+        </div>
+
+        <div class="info-block">
+          <h4>Режим работы</h4>
+          <p>Заезд — с 15:00 · Выезд — до 12:00</p>
+          <p>Ресепшн на связи ежедневно с 8:00 до 22:00</p>
+        </div>
+
+        <button class="btn btn-primary btn-block" data-go="booking">Забронировать дом</button>
+      </div>
+
+      <div class="foot">
+        <span class="mark">Байкал Берег</span>
+        Ольхонский район · Иркутская область<br>
+        © 2025 Глэмпинг «Байкал Берег»
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ BOTTOM NAV ============ -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-tab="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
+      <span>Главная</span>
+    </button>
+    <button class="nav-item" data-tab="stays">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 3 20h18L12 4Z"/><path d="M12 4v16"/></svg>
+      <span>Домики</span>
+    </button>
+    <button class="nav-item" data-tab="booking">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+      <span>Бронь</span>
+    </button>
+    <button class="nav-item" data-tab="contacts">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+      <span>Контакты</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ============ OVERLAY / SHEETS ============ -->
+<div class="overlay" id="overlay">
+
+  <!-- Stay detail -->
+  <div class="sheet" data-sheet="stay">
+    <div class="sheet-head"></div>
+    <button class="sheet-close" data-close aria-label="Закрыть">✕</button>
+    <div class="sheet-media"><img id="mImg" alt=""></div>
+    <div class="sheet-body">
+      <div class="eyebrow" id="mTag"></div>
+      <h3 id="mName"></h3>
+      <p class="desc" id="mDesc"></p>
+      <div class="chips" id="mAmenities"></div>
+      <div class="sheet-foot">
+        <div>
+          <div class="price-cap">за ночь</div>
+          <div class="price" id="mPrice"></div>
+        </div>
+        <button class="btn btn-primary" id="mSelect">Забронировать</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success -->
+  <div class="sheet" data-sheet="success">
+    <div class="sheet-head"></div>
+    <div class="success">
+      <div class="success-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg>
+      </div>
+      <h3>Заявка отправлена</h3>
+      <p>Мы свяжемся с вами в Telegram в течение 15 минут, чтобы подтвердить бронирование и прислать детали.</p>
+      <div class="summary" id="successSummary"></div>
+      <button class="btn btn-primary btn-block" data-close>Готово</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ============================================================
+     0. Telegram Mini App init
+     ============================================================ */
+  var tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+
+  function haptic(type) {
+    try {
+      if (!tg || !tg.HapticFeedback) return;
+      if (type === 'success' || type === 'error' || type === 'warning') {
+        tg.HapticFeedback.notificationOccurred(type);
+      } else {
+        tg.HapticFeedback.impactOccurred(type || 'light');
+      }
+    } catch (e) { /* noop */ }
+  }
+
+  if (tg) {
+    try { tg.ready(); } catch (e) {}
+    try { tg.expand(); } catch (e) {}
+    try { tg.setHeaderColor('#121917'); } catch (e) {}
+    try { tg.setBackgroundColor('#121917'); } catch (e) {}
+    try { if (tg.disableVerticalSwipes) tg.disableVerticalSwipes(); } catch (e) {}
+  }
+
+  /* ============================================================
+     1. Хелперы
+     ============================================================ */
+  function $(sel, root) { return (root || document).querySelector(sel); }
+  function $$(sel, root) {
+    return Array.prototype.slice.call((root || document).querySelectorAll(sel));
+  }
+
+  var rub = new Intl.NumberFormat('ru-RU');
+  function money(n) { return rub.format(n) + ' ₽'; }
+
+  function plural(n, one, few, many) {
+    var m10 = n % 10, m100 = n % 100;
+    if (m10 === 1 && m100 !== 11) return one;
+    if (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) return few;
+    return many;
+  }
+
+  function isoDate(d) {
+    var p = function (n) { return String(n).padStart(2, '0'); };
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+  }
+  function addDays(d, n) {
+    var c = new Date(d.getTime());
+    c.setDate(c.getDate() + n);
+    return c;
+  }
+  function parseISO(s) {
+    if (!s) return null;
+    var parts = String(s).split('-').map(Number);
+    if (parts.length !== 3 || parts.some(isNaN)) return null;
+    return new Date(parts[0], parts[1] - 1, parts[2]);
+  }
+  function formatHuman(iso) {
+    var d = parseISO(iso);
+    if (!d) return '—';
+    var months = ['января','февраля','марта','апреля','мая','июня',
+                  'июля','августа','сентября','октября','ноября','декабря'];
+    return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  var toastTimer = null;
+  function toast(msg) {
+    var el = $('#toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2600);
+  }
+
+  /* ============================================================
+     2. Каталог домов  ← ОБНОВЛЁННЫЙ СПИСОК
+     ============================================================ */
+  var STAYS = [
+    {
+      id: 'skala',
+      name: 'Скала',
+      tag: 'A-frame',
+      price: 12900,
+      area: 26,
+      guests: 2,
+      img: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=900&q=70',
+      short: 'A-frame с панорамным окном во всю стену и видом на скалы Ольхона.',
+      desc: 'Компактный A-frame с панорамным окном во всю стену. Утреннее солнце, вид на скалы и полная тишина. Внутри — двуспальная кровать, дровяная печь и терраса для кофе на рассвете.',
+      amenities: ['Панорамное окно', 'Дровяная печь', 'Терраса', 'До 2 гостей']
+    },
+    {
+      id: 'kedr',
+      name: 'Кедр',
+      tag: 'С купелью',
+      price: 16500,
+      area: 48,
+      guests: 4,
+      img: 'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&fit=crop&w=900&q=70',
+      short: 'Двухуровневый дом с приватной купелью среди кедров.',
+      desc: 'Двухуровневый дом для семьи или компании: две спальни, гостиная с камином и собственная купель с подогревом под кедрами. Большие окна на лес и озеро.',
+      amenities: ['Купель с подогревом', 'Камин', '2 спальни', 'Кухня', 'До 4 гостей']
+    },
+    {
+      id: 'volna',
+      name: 'Волна',
+      tag: 'У воды',
+      price: 18200,
+      area: 34,
+      guests: 2,
+      img: 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=900&q=70',
+      short: 'Дом на сваях прямо у воды — Байкал в нескольких метрах от террасы.',
+      desc: 'Дом на сваях в нескольких метрах от воды. Засыпайте под шум волн, встречайте рассвет на террасе и смотрите на Байкал сквозь панорамное остекление.',
+      amenities: ['40 м до воды', 'Панорамное остекление', 'Терраса над водой', 'До 2 гостей']
+    },
+    {
+      id: 'shaman',
+      name: 'Шаман-шатёр',
+      tag: 'Сафари-тент',
+      price: 9500,
+      area: 22,
+      guests: 2,
+      img: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=900&q=70',
+      short: 'Утеплённый сафари-тент с деревянной террасой на краю леса.',
+      desc: 'Утеплённый сафари-тент на деревянном настиле с террасой на краю леса. Тёплый пол, натуральные ткани и мягкий свет — глэмпинг в его классическом виде.',
+      amenities: ['Утеплён', 'Тёплый пол', 'Деревянная терраса', 'До 2 гостей']
+    }
+  ];
+
+  function stayById(id) {
+    for (var i = 0; i < STAYS.length; i++) {
+      if (STAYS[i].id === id) return STAYS[i];
+    }
+    return STAYS[0];
+  }
+
+  /* ============================================================
+     3. Навигация
+     ============================================================ */
+  function goTo(id) {
+    var screen = document.getElementById(id);
+    if (!screen) return;
+    $$('.screen').forEach(function (s) { s.classList.toggle('active', s === screen); });
+    $$('.nav-item').forEach(function (n) { n.classList.toggle('active', n.dataset.tab === id); });
+    window.scrollTo(0, 0);
+    haptic('light');
+  }
+
+  /* ============================================================
+     4. Рендер каталога  ← ИСПРАВЛЕНО
+     ============================================================ */
+  function renderStays() {
+    var list = document.getElementById('staysList');
+    if (!list) return;
+
+    list.innerHTML = STAYS.map(function (s) {
+      return '' +
+        '<article class="stay" data-stay="' + s.id + '">' +
+          '<div class="stay-media" data-open="' + s.id + '">' +
+            '<img src="' + s.img + '" alt="' + s.name + '" loading="lazy" ' +
+                 'onerror="this.style.display=\'none\'">' +
+            '<div class="stay-tag">' + s.tag + '</div>' +
+            '<div class="stay-guests">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+                   'stroke-linecap="round" stroke-linejoin="round">' +
+                '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>' +
+                '<circle cx="9" cy="7" r="4"/>' +
+                '<path d="M22 21v-2a4 4 0 0 0-3-3.87"/>' +
+              '</svg>' +
+              s.guests +
+            '</div>' +
+          '</div>' +
+          '<div class="stay-body">' +
+            '<h3 data-open="' + s.id + '">' + s.name + '</h3>' +
+            '<div class="stay-meta">' +
+              '<span>' + s.area + ' м²</span>' +
+              '<span class="dot"></span>' +
+              '<span>до ' + s.guests + ' ' + plural(s.guests, 'гостя', 'гостей', 'гостей') + '</span>' +
+              '<span class="dot"></span>' +
+              '<span>' + s.amenities[0] + '</span>' +
+            '</div>' +
+            '<p class="stay-desc">' + s.short + '</p>' +
+            '<div class="stay-foot">' +
+              '<div>' +
+                '<div class="price-cap">за ночь</div>' +
+                '<div class="price">' + rub.format(s.price) + ' ₽</div>' +
+              '</div>' +
+              '<button class="btn btn-primary btn-sm" data-book="' + s.id + '">Забронировать</button>' +
+            '</div>' +
+          '</div>' +
+        '</article>';
+    }).join('');
+  }
+
+  /* ============================================================
+     5. Overlay / sheets
+     ============================================================ */
+  var overlay = null;
+
+  function openSheet(name) {
+    overlay = overlay || document.getElementById('overlay');
+    if (!overlay) return;
+    overlay.classList.add('open');
+    $$('.sheet').forEach(function (s) { s.classList.toggle('show', s.dataset.sheet === name); });
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeOverlay() {
+    overlay = overlay || document.getElementById('overlay');
+    if (!overlay) return;
+    overlay.classList.remove('open');
+    $$('.sheet').forEach(function (s) { s.classList.remove('show'); });
+    document.body.style.overflow = '';
+  }
+
+  function showStayDetail(id) {
+    var s = stayById(id);
+    var img = $('#mImg');
+    if (img) { img.src = s.img; img.alt = s.name; }
+    $('#mTag').textContent = s.tag;
+    $('#mName').textContent = s.name;
+    $('#mDesc').textContent = s.desc;
+    $('#mPrice').textContent = rub.format(s.price) + ' ₽';
+    $('#mAmenities').innerHTML = s.amenities.map(function (a) {
+      return '<span class="chip">' + a + '</span>';
+    }).join('');
+    $('#mSelect').setAttribute('data-select', s.id);
+    openSheet('stay');
+  }
+
+  /* ============================================================
+     6. Бронирование
+     ============================================================ */
+  var houseSelect, checkin, checkout, guestsVal, guestsMaxLabel,
+      minusBtn, plusBtn, submitBtn;
+  var guests = 2;
+
+  function currentStay() { return stayById(houseSelect ? houseSelect.value : STAYS[0].id); }
+
+  function syncGuestsMax() {
+    var max = currentStay().guests;
+    if (guests > max) guests = max;
+    if (guests < 1) guests = 1;
+    guestsVal.textContent = guests;
+    guestsMaxLabel.textContent = 'из ' + max;
+    minusBtn.disabled = guests <= 1;
+    plusBtn.disabled = guests >= max;
+  }
+
+  function recalc() {
+    var stay = currentStay();
+    var ci = parseISO(checkin.value);
+    var co = parseISO(checkout.value);
+    var nights = 0;
+
+    if (ci && co) {
+      nights = Math.round((co - ci) / 86400000);
+      if (!isFinite(nights) || nights < 0) nights = 0;
+    }
+
+    $('#sumHouse').textContent = stay.name;
+    $('#sumNights').textContent = nights > 0
+      ? nights + ' ' + plural(nights, 'ночь', 'ночи', 'ночей')
+      : '—';
+    $('#sumRate').textContent = money(stay.price);
+    $('#sumTotal').textContent = nights > 0 ? money(stay.price * nights) : '—';
+
+    var valid = nights >= 1;
+    submitBtn.disabled = !valid;
+    submitBtn.textContent = valid
+      ? 'Отправить заявку · ' + money(stay.price * nights)
+      : 'Выберите даты';
+  }
+
+  /* Выбор дома из каталога или из шторки → на вкладку «Бронь» */
+  function selectStayForBooking(id) {
+    if (!houseSelect) return;
+    houseSelect.value = id;
+    syncGuestsMax();
+    recalc();
+    closeOverlay();
+    goTo('booking');
+    haptic('success');
+    toast('«' + stayById(id).name + '» выбран — укажите даты');
+  }
+
+  function initBooking() {
+    houseSelect   = $('#houseSelect');
+    checkin       = $('#checkin');
+    checkout      = $('#checkout');
+    guestsVal     = $('#guestsVal');
+    guestsMaxLabel= $('#guestsMaxLabel');
+    minusBtn      = $('#minusGuests');
+    plusBtn       = $('#plusGuests');
+    submitBtn     = $('#submitBtn');
+
+    if (!houseSelect || !checkin || !checkout) return;
+
+    /* Заполняем селект домами */
+    houseSelect.innerHTML = STAYS.map(function (s) {
+      return '<option value="' + s.id + '">' + s.name +
+             ' · ' + rub.format(s.price) + ' ₽/ночь</option>';
+    }).join('');
+
+    /* Даты по умолчанию: завтра → через 3 дня */
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    var minISO = isoDate(today);
+
+    checkin.min = minISO;
+    checkout.min = minISO;
+    checkin.value = isoDate(addDays(today, 1));
+    checkout.value = isoDate(addDays(today, 3));
+
+    checkin.addEventListener('change', function () {
+      if (!checkin.value) return;
+      var ci = parseISO(checkin.value);
+      var nextDay = isoDate(addDays(ci, 1));
+      checkout.min = nextDay;
+      if (!checkout.value || checkout.value <= checkin.value) {
+        checkout.value = isoDate(addDays(ci, 2));
+      }
+      recalc();
+      haptic('light');
+    });
+
+    checkout.addEventListener('change', function () {
+      if (checkout.value && checkin.value && checkout.value <= checkin.value) {
+        var ci = parseISO(checkin.value);
+        checkout.value = isoDate(addDays(ci, 1));
+        toast('Выезд должен быть позже заезда');
+      }
+      recalc();
+      haptic('light');
+    });
+
+    houseSelect.addEventListener('change', function () {
+      syncGuestsMax();
+      recalc();
+      haptic('light');
+    });
+
+    minusBtn.addEventListener('click', function () {
+      if (guests > 1) { guests--; syncGuestsMax(); haptic('light'); }
+    });
+    plusBtn.addEventListener('click', function () {
+      if (guests < currentStay().guests) { guests++; syncGuestsMax(); haptic('light'); }
+    });
+
+    $('#bookingForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var stay = currentStay();
+      var ci = parseISO(checkin.value);
+      var co = parseISO(checkout.value);
+
+      if (!ci || !co) {
+        toast('Укажите даты заезда и выезда');
+        haptic('error');
+        return;
+      }
+
+      var nights = Math.round((co - ci) / 86400000);
+      if (nights < 1) {
+        toast('Минимальное бронирование — 1 ночь');
+        haptic('error');
+        return;
+      }
+
+      var total = stay.price * nights;
+
+      /* Если подключён бот — раскомментируйте:
+         if (tg && tg.sendData) tg.sendData(JSON.stringify({
+           house: stay.name, checkin: checkin.value, checkout: checkout.value,
+           nights: nights, guests: guests, total: total
+         }));
+      */
+
+      $('#successSummary').innerHTML = '' +
+        '<div class="sum-row"><span>Дом</span><b>' + stay.name + '</b></div>' +
+        '<div class="sum-row"><span>Заезд</span><b>' + formatHuman(checkin.value) + '</b></div>' +
+        '<div class="sum-row"><span>Выезд</span><b>' + formatHuman(checkout.value) + '</b></div>' +
+        '<div class="sum-row"><span>Гостей</span><b>' + guests + '</b></div>' +
+        '<div class="sum-row"><span>Ночей</span><b>' + nights + '</b></div>' +
+        '<div class="sum-divider"></div>' +
+        '<div class="sum-row total"><span>Итого</span><b>' + money(total) + '</b></div>';
+
+      haptic('success');
+      openSheet('success');
+    });
+
+    syncGuestsMax();
+    recalc();
+  }
+
+  /* ============================================================
+     7. Делегирование кликов
+     ============================================================ */
+  function bindGlobalClicks() {
+    document.addEventListener('click', function (e) {
+      /* Табы нижней навигации */
+      var navBtn = e.target.closest('.nav-item');
+      if (navBtn && navBtn.dataset.tab) {
+        goTo(navBtn.dataset.tab);
+        return;
+      }
+
+      /* Кнопки «куда-то перейти» */
+      var go = e.target.closest('[data-go]');
+      if (go) {
+        e.preventDefault();
+        goTo(go.dataset.go);
+        return;
+      }
+
+      /* Кнопка «Забронировать» на карточке домика */
+      var book = e.target.closest('[data-book]');
+      if (book) {
+        e.preventDefault();
+        selectStayForBooking(book.dataset.book);
+        return;
+      }
+
+      /* Открыть подробности домика */
+      var open = e.target.closest('[data-open]');
+      if (open) {
+        e.preventDefault();
+        showStayDetail(open.dataset.open);
+        haptic('medium');
+        return;
+      }
+
+      /* «Забронировать» в шторке */
+      var mSelect = e.target.closest('#mSelect');
+      if (mSelect) {
+        e.preventDefault();
+        selectStayForBooking(mSelect.getAttribute('data-select'));
+        return;
+      }
+
+      /* Закрытие оверлея */
+      if (e.target.closest('[data-close]')) {
+        closeOverlay();
+        haptic('light');
+        return;
+      }
+      if (e.target.id === 'overlay') {
+        closeOverlay();
+        return;
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeOverlay();
+    });
+  }
+
+  /* ============================================================
+     8. Старт
+     ============================================================ */
+  function init() {
+    bindGlobalClicks();
+    renderStays();      // ← каталог домиков
+    initBooking();      // ← форма брони
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  /* Страховка: если что-то пошло не так на первом проходе */
+  window.addEventListener('load', function () {
+    var list = document.getElementById('staysList');
+    if (list && !list.children.length) {
+      try { renderStays(); } catch (err) { console.error('stays render:', err); }
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
